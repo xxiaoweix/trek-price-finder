@@ -69,7 +69,8 @@ Repeat `--watch SOME_KEY` to scan one or more bikes from that file instead of
 the whole list. Keys are the `key:` lines in the catalog.
 
 `site/index.html` is a static page. Open it from the `site/` folder after the
-JSON file exists. The page reads only that file. Filters on the page are
+JSON file exists. The page reads only that file. The published page refreshes
+weekly via GitHub Actions. Filters on the page are
 model, generation, size, color, and state. It does not contact Trek or Locally.
 
 ## Configuration

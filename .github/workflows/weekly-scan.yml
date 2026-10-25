@@ -1,0 +1,52 @@
+name: Trek top sellers
+on:
+  schedule:
+    - cron: "15 14 * * 0"
+      timezone: "America/Los_Angeles"
+  workflow_dispatch:
+concurrency:
+  group: trek-price-finder-weekly-scan
+  cancel-in-progress: false
+permissions:
+  contents: write
+env:
+  PYTHONUTF8: "1"
+  PYTHONPATH: src
+  TRACKER_MIN_HOST_INTERVAL_SECONDS: "0.05"
+  TRACKER_GLOBAL_MIN_INTERVAL_SECONDS: "0.15"
+  TRACKER_SCAN_WORKERS: "8"
+  TRACKER_OFFICIAL_STORE_AUDIT_ENABLED: "false"
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: pyproject.toml
+      - run: python -m pip install .
+      - name: Scan top sellers
+        run: |
+          set -euo pipefail
+          python -m bike_price_alerts.cli price-board \
+            --profile conus \
+            --db data/top-sellers.sqlite3 \
+            --out site/data/prices.json \
+            --no-resume \
+            --fail-on-partial
+      - uses: actions/upload-artifact@v6
+        with:
+          name: trek-top-sellers-${{ github.run_id }}
+          path: site/data/prices.json
+      - name: Commit the price dataset
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add site/data/prices.json
+          git diff --cached --quiet && exit 0
+          git commit -m "Update Trek top-seller prices"
+          git push
