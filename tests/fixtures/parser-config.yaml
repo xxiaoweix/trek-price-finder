@@ -1,0 +1,130 @@
+# Parser fixtures for the HTML snapshots in this directory.
+# Identities are a few variants from config/trek/top-sellers.yaml.
+# Not a list of bikes to scan. Run the CLI with examples/trek.yaml.
+version: 2
+locally:
+  company_id: 3480
+  center_lat: 39.8283
+  center_lng: -98.5795
+  radius_miles: 2000
+  page_limit: 100
+scan:
+  default_profile: canary
+  profiles:
+    canary:
+      coverage: points
+      points:
+      - label: Rockford, IL
+        lat: 42.2711
+        lng: -89.094
+        distance_diag: 100
+    regional:
+      coverage: points
+      points:
+      - label: New York, NY
+        lat: 40.7128
+        lng: -74.006
+        distance_diag: 140
+      - label: Los Angeles, CA
+        lat: 34.0522
+        lng: -118.2437
+        distance_diag: 140
+      - label: Rockford, IL
+        lat: 42.2711
+        lng: -89.094
+        distance_diag: 140
+      - label: Dallas, TX
+        lat: 32.7767
+        lng: -96.797
+        distance_diag: 140
+      - label: Denver, CO
+        lat: 39.7392
+        lng: -104.9903
+        distance_diag: 140
+      - label: Atlanta, GA
+        lat: 33.749
+        lng: -84.388
+        distance_diag: 140
+      - label: Billings, MT
+        lat: 45.7833
+        lng: -108.5007
+        distance_diag: 160
+      - label: Portland, OR
+        lat: 45.5152
+        lng: -122.6784
+        distance_diag: 140
+    conus:
+      coverage: conus
+      initial_distance_diag: 300
+      minimum_distance_diag: 45
+      max_depth: 3
+      overlap: 0.3
+watches:
+- key: marlin_5_gen_3_57363
+  canonical_name: Trek Marlin 5 Gen 3
+  aliases:
+  - Marlin 5
+  - Trek Marlin 5 Gen 3
+  exclusions: []
+  allowed_sizes:
+  - 'M (29" wheel)'
+  baseline_usd: 1000.00
+  msrp_usd: 1000.00
+  locally:
+    variants:
+    - upc: '197216263494'
+      product_id: 57363
+      style: '57363'
+      size: 'M (29" wheel)'
+      color: Miami Green/Dark Aquatic Fade
+    seed_store_ids: []
+  public_urls: []
+- key: domane_al_2_gen_4_80164
+  canonical_name: Trek Domane AL 2 Gen 4
+  aliases:
+  - Domane AL 2
+  - Domane AL 2 Gen 4
+  - Trek Domane AL 2 Gen 4
+  exclusions: []
+  allowed_sizes:
+  - '52'
+  - '54'
+  - 52cm
+  baseline_usd: 1000.00
+  msrp_usd: 1200.00
+  locally:
+    variants:
+    - upc: '197216436744'
+      product_id: 80164
+      style: '80164'
+      size: '52'
+      color: Matte Dark Star Black
+    - upc: '197216436751'
+      product_id: 80164
+      style: '80164'
+      size: '54'
+      color: Matte Dark Star Black
+    seed_store_ids: []
+  public_urls:
+  - source: bikeexchange
+    url: https://www.bikeexchange.com/en-US/products/trek-domane-al-2-gen-4?sku=EXAMPLE52
+- key: fuel_ex_5_gen_7_79586
+  canonical_name: Trek Fuel EX 5 Gen 7
+  aliases:
+  - Fuel EX 5
+  - Fuel EX 5 Gen 7
+  - Trek Fuel EX 5 Gen 7
+  exclusions: []
+  allowed_sizes:
+  - M
+  baseline_usd: 2000.00
+  msrp_usd: 2000.00
+  locally:
+    variants:
+    - upc: '197216460381'
+      product_id: 79586
+      style: '79586'
+      size: M
+      color: Wild Mushroom / Trek Black
+    seed_store_ids: []
+  public_urls: []

@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=68", "wheel>=0.42"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bike-price-alerts"
+version = "0.3.0"
+description = "Find in-stock Trek prices at US shops"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "PyYAML>=6.0,<7",
+  "tzdata>=2025.2,<2027",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8,<9",
+  "pytest-cov>=5,<7",
+  "respx>=0.21,<1",
+  "ruff>=0.6,<1",
+]
+
+[project.scripts]
+bike-price-alerts = "bike_price_alerts.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.coverage.run]
+branch = true
+source = ["bike_price_alerts"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+exclude = ["build"]
+
+[tool.ruff.lint]
+# Scanner boundaries deliberately isolate a failed external source so healthy
+# sources can still produce observations; failures are persisted and surfaced.
+ignore = ["BLE001"]

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Trek US prices</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <header>
+        <h1>Trek US prices</h1>
+        <p id="updated">Loading prices…</p>
+        <p id="note"></p>
+      </header>
+      <form id="filters"></form>
+      <p id="result-count"></p>
+      <div class="table-wrap">
+        <table id="offers">
+          <thead>
+            <tr>
+              <th>Price</th>
+              <th>Model</th>
+              <th>Gen</th>
+              <th>Size</th>
+              <th>Color</th>
+              <th>Store</th>
+              <th>City, State</th>
+              <th>Lowest seen</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <footer>
+        <p>This page reads a saved price file in your browser. It does not contact Locally.</p>
+        <p>
+          Want other models?
+          <a href="https://github.com/xxiaoweix/trek-price-finder#scan-any-trek-model">Run the CLI yourself</a>.
+        </p>
+        <p>
+          Lowest seen is the cheapest in-stock price recorded for that UPC.
+          This page does not sell bikes and is not affiliated with Trek or Locally.
+        </p>
+      </footer>
+    </main>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

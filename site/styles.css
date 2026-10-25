@@ -1,0 +1,141 @@
+:root {
+  color-scheme: light;
+  --text: #1a1a1a;
+  --muted: #5e5e5e;
+  --rule: #e4e4e4;
+  --line: #d4d4d4;
+  --accent: #3d5470;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: #fff;
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 56px 32px 80px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+#updated,
+#note {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+#note { max-width: 40rem; }
+
+#filters {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 22px 18px;
+  margin: 40px 0 0;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+select {
+  min-height: 42px;
+  margin: 0;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 0;
+  background: #fff;
+  color: var(--text);
+  font: inherit;
+}
+
+select:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+#result-count {
+  margin: 32px 0 0;
+  font-size: 0.9375rem;
+}
+
+.table-wrap {
+  margin-top: 8px;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 16px 20px 16px 0;
+  text-align: left;
+  vertical-align: baseline;
+  border-bottom: 1px solid var(--rule);
+  font-weight: 400;
+}
+
+th {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+th,
+td { white-space: nowrap; }
+
+.price,
+.seen { font-variant-numeric: tabular-nums; }
+
+.color,
+.store { white-space: normal; }
+
+a {
+  color: var(--accent);
+  text-underline-offset: 2px;
+}
+
+footer {
+  max-width: 40rem;
+  margin-top: 48px;
+  padding-top: 20px;
+  border-top: 1px solid var(--rule);
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+footer p { margin: 0 0 10px; }
+
+@media (max-width: 860px) {
+  .page { padding: 36px 20px 64px; }
+  #filters { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 640px) {
+  h1 { font-size: 1.5rem; }
+  #filters {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
