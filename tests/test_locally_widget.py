@@ -24,8 +24,8 @@ def _marker(store_id, name, city, distance):
         "name": name,
         "address": "123 Bike Lane",
         "city": city,
-        "state": "IL",
-        "zip": "61111",
+        "state": "CO",
+        "zip": "80202",
         "distance": distance,
         "inventory_refreshed_at": "2026-07-27 01:12:43",
     }
@@ -72,9 +72,9 @@ class FakeWidgetHTTP:
             return FakeResponse(
                 {
                     "is_certain": True,
-                    "city_label": "Rockford, IL",
-                    "lat": 42.275043,
-                    "lng": -89.075745,
+                    "city_label": "Denver, CO",
+                    "lat": 39.7525,
+                    "lng": -104.9995,
                 }
             )
         if url.endswith("/stores/conversion_data"):
@@ -90,7 +90,7 @@ class FakeWidgetHTTP:
                     }
                 )
             markers = [
-                _marker(243954, "Trek Bicycle Rockford", "Loves Park", 5.8),
+                _marker(243954, "Example Bikes", "Denver", 5.8),
                 _marker(207114, "George Garner Cyclery", "Lake Zurich", 50.2),
             ]
             store_id = params.get("only_store_id")
@@ -142,7 +142,7 @@ def test_public_widget_crawler_isolates_each_store_price():
     lowest = min(result.listings, key=lambda item: item.sale_price_usd)
     assert lowest.sale_price_usd == Decimal("800.00")
     assert lowest.msrp_usd == Decimal("1000.00")
-    assert lowest.retailer == "Trek Bicycle Rockford"
+    assert lowest.retailer == "Example Bikes"
     assert lowest.size == 'M (29" wheel)'
     assert lowest.upc == "197216263494"
     assert lowest.color == "Miami Green/Dark Aquatic Fade"

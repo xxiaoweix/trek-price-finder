@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "bike-price-alerts"
 version = "0.3.0"
-description = "Find in-stock Trek prices at US shops"
+description = "Finds the cheapest in-stock Trek bikes at US dealers"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [

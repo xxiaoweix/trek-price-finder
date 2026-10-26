@@ -76,8 +76,8 @@ def test_loads_valid_widget_point():
     config = load_config("tests/fixtures/parser-config.yaml")
 
     point = config.scan_profile("canary").points[0]
-    assert point.label == "Rockford, IL"
-    assert point.lat == pytest.approx(42.2711)
+    assert point.label == "Denver, CO"
+    assert point.lat == pytest.approx(39.7525)
     assert point.distance_diag == 100
 
 

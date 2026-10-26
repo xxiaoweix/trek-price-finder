@@ -14,9 +14,9 @@ scan:
     canary:
       coverage: points
       points:
-      - label: Rockford, IL
-        lat: 42.2711
-        lng: -89.094
+      - label: Denver, CO
+        lat: 39.7525
+        lng: -104.9995
         distance_diag: 100
     regional:
       coverage: points
@@ -29,17 +29,13 @@ scan:
         lat: 34.0522
         lng: -118.2437
         distance_diag: 140
-      - label: Rockford, IL
-        lat: 42.2711
-        lng: -89.094
+      - label: Denver, CO
+        lat: 39.7525
+        lng: -104.9995
         distance_diag: 140
       - label: Dallas, TX
         lat: 32.7767
         lng: -96.797
-        distance_diag: 140
-      - label: Denver, CO
-        lat: 39.7392
-        lng: -104.9903
         distance_diag: 140
       - label: Atlanta, GA
         lat: 33.749

@@ -17,18 +17,17 @@ scan:
     canary:
       coverage: points
       points:
-        - label: Rockford, IL
-          lat: 42.2711
-          lng: -89.0940
+        - label: Denver, CO
+          lat: 39.7525
+          lng: -104.9995
           distance_diag: 100
     regional:
       coverage: points
       points:
         - {label: "New York, NY", lat: 40.7128, lng: -74.0060, distance_diag: 140}
         - {label: "Los Angeles, CA", lat: 34.0522, lng: -118.2437, distance_diag: 140}
-        - {label: "Rockford, IL", lat: 42.2711, lng: -89.0940, distance_diag: 140}
+        - {label: "Denver, CO", lat: 39.7525, lng: -104.9995, distance_diag: 140}
         - {label: "Dallas, TX", lat: 32.7767, lng: -96.7970, distance_diag: 140}
-        - {label: "Denver, CO", lat: 39.7392, lng: -104.9903, distance_diag: 140}
         - {label: "Atlanta, GA", lat: 33.7490, lng: -84.3880, distance_diag: 140}
         - {label: "Billings, MT", lat: 45.7833, lng: -108.5007, distance_diag: 160}
         - {label: "Portland, OR", lat: 45.5152, lng: -122.6784, distance_diag: 140}

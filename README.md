@@ -1,7 +1,6 @@
-# Bike price alerts
+# Trek Price Finder
 
-A small command-line tool that reads public Trek and Locally pages and prints
-the cheapest in-stock price it can verify at US shops.
+Finds the cheapest in-stock Trek bikes at US dealers.
 
 Latest prices for ten popular Trek families:
 https://xxiaoweix.github.io/trek-price-finder/
@@ -34,8 +33,8 @@ product, up to four.
 
 `--profile conus` is the contiguous United States. That is the scan that can
 report the cheapest verified in-stock price. It takes a long time. `canary`
-checks one area around Rockford, Illinois, and is only a sample. `regional`
-checks eight cities. A sample is not a US low.
+checks one area around Denver, CO, and is only a sample. `regional`
+checks seven cities. A sample is not a US low.
 
 ```bash
 bike-price-alerts scan --model "Marlin 5 Gen 3" --size 'M (29" wheel)' --profile canary --max-cells 1

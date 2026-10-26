@@ -99,13 +99,13 @@ class ProductionWidgetHTTP:
     def _marker():
         return {
             "id": 243954,
-            "name": "Trek Bicycle Rockford",
-            "address": "4169 N Perryville Rd",
-            "city": "Loves Park",
-            "state": "Il",
-            "zip": "61111",
-            "lat": 42.31,
-            "lng": -89.0,
+            "name": "Example Bikes",
+            "address": "1 Main",
+            "city": "Denver",
+            "state": "CO",
+            "zip": "80202",
+            "lat": 39.7525,
+            "lng": -104.9995,
             "distance": 5.8,
             "inventory_refreshed_at": "2026-07-27 01:12:43",
         }
@@ -290,7 +290,7 @@ def test_checkpointed_scan_is_idempotent_and_builds_complete_report(tmp_path):
     assert coverage["discovered_stores"] == 1
     assert coverage["stocked_store_variant_pairs"] == 1
     assert coverage["unpriced_stocked_store_variant_pairs"] == 0
-    assert coverage["discovered_store_states"] == {"IL": 1}
+    assert coverage["discovered_store_states"] == {"CO": 1}
     assert len(listings) == 1
     assert listings[0]["sale_price_usd"] == "800.00"
     assert listings[0]["sku"] is None
@@ -298,7 +298,7 @@ def test_checkpointed_scan_is_idempotent_and_builds_complete_report(tmp_path):
     assert not report.payload["national_claim_allowed"]
     assert report.markdown_path.exists()
     report_text = report.markdown_path.read_text(encoding="utf-8")
-    assert "Trek Bicycle Rockford" in report_text
+    assert "Example Bikes" in report_text
     assert "它不是美国本土全国扫描" in report_text
     assert "- 扫描时间：" in report_text
     assert "- Scan ID：" not in report_text
@@ -399,7 +399,7 @@ def test_saturated_cell_is_subdivided_before_completion(tmp_path):
     assert coverage["discovered_stores"] == 1
     assert coverage["stocked_store_variant_pairs"] == 1
     assert coverage["unpriced_stocked_store_variant_pairs"] == 0
-    assert coverage["discovered_store_states"] == {"IL": 1}
+    assert coverage["discovered_store_states"] == {"CO": 1}
 
 
 def test_conus_grid_is_deterministic_and_adaptive():
@@ -563,7 +563,7 @@ def test_conus_report_fails_closed_when_a_state_has_no_store_markers(tmp_path):
 
     assert report.status == "PARTIAL"
     assert not report.payload["national_claim_allowed"]
-    assert "IL" not in report.payload["coverage"]["missing_store_states"]
+    assert "CO" not in report.payload["coverage"]["missing_store_states"]
     assert "CA" in report.payload["coverage"]["missing_store_states"]
 
 

@@ -163,9 +163,9 @@ def test_lowest_offer_picks_the_in_stock_minimum():
                 "sale_price_usd": "800.00",
                 "msrp_usd": "1000.00",
                 "in_stock": True,
-                "retailer": "Trek Bicycle Rockford",
-                "city": "Loves Park",
-                "state": "IL",
+                "retailer": "Example Bikes",
+                "city": "Denver",
+                "state": "CO",
                 "url": "https://trek.locally.com/low",
                 "size": 'M (29" wheel)',
                 "color": "Miami Green",
@@ -177,5 +177,5 @@ def test_lowest_offer_picks_the_in_stock_minimum():
 
     assert offer is not None
     assert offer.price_usd == "800.00"
-    assert offer.retailer == "Trek Bicycle Rockford"
+    assert offer.retailer == "Example Bikes"
     assert offer.url == "https://trek.locally.com/low"

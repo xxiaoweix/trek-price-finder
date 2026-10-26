@@ -20,17 +20,17 @@ def _price(amount, maximum=None):
     )
 
 
-def _marker(store_id, name, *, country="US", state="IL"):
+def _marker(store_id, name, *, country="US", state="CO"):
     return {
         "id": store_id,
         "name": name,
-        "city": "Rockford",
+        "city": "Denver",
         "state": state,
         "country": country,
-        "zip": "61101",
+        "zip": "80202",
         "address": "1 Main",
-        "lat": 42.27,
-        "lng": -89.09,
+        "lat": 39.7525,
+        "lng": -104.9995,
     }
 
 
