@@ -11,27 +11,44 @@
       <header>
         <h1>Trek US prices</h1>
         <p id="updated">Loading prices…</p>
+        <p id="stale" class="stale" role="alert" hidden></p>
+        <p id="freshness" hidden>
+          Prices come from a weekly scan, so stock may have changed since.
+          Confirm the price and stock on the store page before you go.
+        </p>
         <p id="note"></p>
       </header>
-      <form id="filters"></form>
-      <p id="result-count"></p>
+      <form id="filters" aria-label="Filters">
+        <div id="filter-list" class="filter-list"></div>
+        <button type="button" id="clear" class="clear" hidden>Clear all</button>
+      </form>
+      <p id="result-count" aria-live="polite"></p>
       <div class="table-wrap">
-        <table id="offers">
+        <table id="offers" hidden>
           <thead>
             <tr>
-              <th>Price</th>
-              <th>Model</th>
-              <th>Gen</th>
-              <th>Size</th>
-              <th>Color</th>
-              <th>Store</th>
-              <th>City, State</th>
-              <th>Lowest seen</th>
+              <th data-sort="price">Price</th>
+              <th data-sort="model">Model</th>
+              <th data-sort="generation">Gen</th>
+              <th data-sort="size">Size</th>
+              <th data-sort="color">Color</th>
+              <th data-sort="store">Store</th>
+              <th data-sort="place">City, State</th>
+              <th data-sort="seen" class="seen">Lowest seen (US)</th>
             </tr>
           </thead>
           <tbody></tbody>
         </table>
       </div>
+      <nav id="pager" class="pager" aria-label="Pages" hidden>
+        <button type="button" id="prev">Previous</button>
+        <span id="page-label"></span>
+        <button type="button" id="next">Next</button>
+        <label class="per-page">
+          Rows per page
+          <select id="per-page"></select>
+        </label>
+      </nav>
       <footer>
         <p>This page reads a saved price file in your browser. It does not contact Locally.</p>
         <p>
@@ -39,7 +56,8 @@
           <a href="https://github.com/xxiaoweix/trek-price-finder#scan-any-trek-model">Run the CLI yourself</a>.
         </p>
         <p>
-          Lowest seen is the cheapest in-stock price recorded for that UPC.
+          Lowest seen (US) is the cheapest in-stock price recorded for that UPC anywhere in the contiguous US.
+          The column appears once a bike has been cheaper than its best price today.
           This page does not sell bikes and is not affiliated with Trek or Locally.
         </p>
       </footer>
