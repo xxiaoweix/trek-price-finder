@@ -251,6 +251,14 @@ def test_requeue_transient_failures_skips_saturated_and_exhausted(tmp_path):
             8,
             error="ValueError: price missing",
         )
+        assert storage.claim_offer(scan_id, "example", "upc-429", 9, cell.cell_id)
+        storage.finish_offer(
+            scan_id,
+            "example",
+            "upc-429",
+            9,
+            error="RemoteDisconnected: Remote end closed connection without response",
+        )
 
         requeued = storage.requeue_transient_failures(scan_id)
         pending_cells = {
@@ -264,7 +272,7 @@ def test_requeue_transient_failures_skips_saturated_and_exhausted(tmp_path):
 
     assert "HTTPError: HTTP Error 429: Too Many Requests" in requeued
     assert pending_cells == {("upc-429", 1)}
-    assert pending_offers == {(7, 1)}
+    assert pending_offers == {(7, 1), (9, 1)}
 
 
 def test_store_catalog_audit_is_persisted_and_can_fall_back(tmp_path):

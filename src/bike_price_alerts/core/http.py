@@ -170,7 +170,9 @@ class HTTPClient:
                     raise
                 time.sleep(_backoff_seconds(attempt, retry_after))
                 continue
-            except (IncompleteRead, URLError, TimeoutError) as exc:
+            # ConnectionError covers RemoteDisconnected and ConnectionResetError,
+            # which urllib raises unwrapped when the server drops the socket.
+            except (IncompleteRead, URLError, TimeoutError, ConnectionError) as exc:
                 last_error = exc
                 if attempt + 1 >= _OTHER_ATTEMPTS:
                     raise

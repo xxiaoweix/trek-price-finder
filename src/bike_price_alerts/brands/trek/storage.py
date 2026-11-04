@@ -453,6 +453,8 @@ class Storage:
                 OR LOWER(error) LIKE '%timeout%'
                 OR LOWER(error) LIKE '%urlerror%'
                 OR LOWER(error) LIKE '%incompleteread%'
+                OR LOWER(error) LIKE '%remotedisconnected%'
+                OR LOWER(error) LIKE '%connectionreset%'
                 OR LOWER(error) LIKE '%http error 500%'
                 OR LOWER(error) LIKE '%http error 502%'
                 OR LOWER(error) LIKE '%http error 503%'

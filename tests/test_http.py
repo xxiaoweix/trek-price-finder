@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from email.message import Message
 from email.utils import formatdate
-from http.client import IncompleteRead
+from http.client import IncompleteRead, RemoteDisconnected
 from urllib.error import HTTPError
 
 from bike_price_alerts.core import http as http_module
@@ -68,6 +68,21 @@ class _StatusOpener:
         raise HTTPError(request.full_url, self.code, "Too Many Requests", headers, None)
 
 
+class _DroppingOpener:
+    """Drops the connection the first ``drops`` times, then answers."""
+
+    def __init__(self, drops: int, error: type[Exception] = RemoteDisconnected) -> None:
+        self.calls = 0
+        self.drops = drops
+        self.error = error
+
+    def open(self, _request, *, timeout):
+        self.calls += 1
+        if self.calls <= self.drops:
+            raise self.error("Remote end closed connection without response")
+        return _RawResponse(b'{"ok": true}')
+
+
 def _client(opener) -> HTTPClient:
     http_module.reset_rate_limiter()
     client = HTTPClient()
@@ -85,6 +100,31 @@ def test_http_client_retries_incomplete_read(monkeypatch):
 
     assert opener.calls == 2
     assert response.json() == {"ok": True}
+
+
+def test_dropped_connection_is_retried_then_succeeds(monkeypatch):
+    monkeypatch.setattr(http_module.time, "sleep", lambda _seconds: None)
+    for error in (RemoteDisconnected, ConnectionResetError):
+        client = _client(_DroppingOpener(2, error))
+
+        response = client.get("https://example.test/data")
+
+        assert client._opener.calls == 3
+        assert response.json() == {"ok": True}
+
+
+def test_dropped_connection_gives_up_after_three_attempts(monkeypatch):
+    monkeypatch.setattr(http_module.time, "sleep", lambda _seconds: None)
+    client = _client(_DroppingOpener(10))
+
+    try:
+        client.get("https://example.test/data")
+    except RemoteDisconnected:
+        pass
+    else:
+        raise AssertionError("expected the dropped connection to exhaust its retries")
+
+    assert client._opener.calls == 3
 
 
 def test_retry_after_seconds_accepts_delay_and_http_date():
