@@ -41,7 +41,27 @@ jobs:
         with:
           name: trek-top-sellers-${{ github.run_id }}
           path: site/data/prices.json
+      - name: Summarize the scan
+        run: |
+          python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import collections, json
+          d = json.load(open("site/data/prices.json"))
+          def family(model):
+              two = " ".join(model.split()[:2])
+              return two if two in {"Fuel EX", "FX Sport", "Top Fuel", "Dual Sport"} else model.split()[0]
+          models, offers = collections.defaultdict(set), collections.Counter()
+          for o in d["offers"]:
+              models[family(o["model"])].add(o["model"])
+              offers[family(o["model"])] += 1
+          print(f"offers={d['offer_count']} skipped={d['skipped_offer_count']} "
+                f"models={sum(map(len, models.values()))} upcs={len(d['upc_lows'])}\n")
+          print("| family | models | offers |\n|---|---|---|")
+          for name in sorted(offers):
+              print(f"| {name} | {len(models[name])} | {offers[name]} |")
+          PY
       - name: Commit the price dataset
+        # Only main publishes data; test branches keep the result as the artifact above.
+        if: github.ref == 'refs/heads/main'
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
