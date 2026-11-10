@@ -8,12 +8,13 @@ export const DEFAULT_SORT = { key: "price", dir: "asc" };
 export const DEFAULT_PER_PAGE = 50;
 export const STALE_AFTER_DAYS = 8;
 
-const TWO_WORD_FAMILIES = new Set(["Fuel EX", "Fuel EXe", "Top Fuel", "Dual Sport"]);
-const LETTER_SIZES = ["XXS", "XS", "S", "P", "M", "ML", "MG", "L", "G", "XL", "XG", "XXL"];
+const TWO_WORD_FAMILIES = new Set(["Fuel EX", "Fuel EXe", "Top Fuel", "FX Sport", "Dual Sport"]);
+const LETTER_SIZES = ["XXS", "XS", "XP", "S", "P", "M", "ML", "MG", "L", "G", "XL", "XG", "XXL"];
 const collator = new Intl.Collator("en-US", { numeric: true, sensitivity: "base" });
 
 // Trek family is the leading word of the model name ("Marlin 5" -> "Marlin"),
-// except a few two-word families such as "Fuel EX 9.8 XT" -> "Fuel EX".
+// except a few two-word families such as "Fuel EX 9.8 XT" -> "Fuel EX" and
+// "FX Sport SL 4" -> "FX Sport" (while "FX 2" stays "FX").
 export function familyOf(model) {
   const words = String(model || "").trim().split(/\s+/).filter(Boolean);
   if (!words.length) return "";

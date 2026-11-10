@@ -241,3 +241,25 @@ def test_accepted_request_after_429_keeps_a_shared_penalty(monkeypatch):
     assert response.json() == {"ok": True}
     assert 12 in sleeps
     assert http_module.rate_limit_penalty_seconds() == 2.0 * 0.97
+
+
+def test_request_metrics_count_429s_retries_and_failures(monkeypatch):
+    monkeypatch.setattr(http_module.time, "sleep", lambda _seconds: None)
+    client = _client(_StatusOpener(429, succeed_on=3))
+
+    client.get("https://example.test/data")
+    metrics = http_module.request_metrics()
+    assert (metrics.attempts, metrics.throttled, metrics.retries) == (3, 2, 2)
+    assert metrics.avg_latency_seconds >= 0.0
+    assert "429s=2 retries=2" in metrics.summary()
+
+    client._opener = _StatusOpener(404)
+    try:
+        client.get("https://example.test/missing")
+    except HTTPError:
+        pass
+    metrics = http_module.request_metrics()
+    assert (metrics.attempts, metrics.throttled, metrics.retries) == (4, 2, 2)
+
+    http_module.reset_rate_limiter()
+    assert http_module.request_metrics() == http_module.RequestMetrics(0, 0, 0, 0.0)

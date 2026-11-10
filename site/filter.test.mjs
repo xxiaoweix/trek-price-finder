@@ -51,6 +51,12 @@ test("family is the leading word, with two-word families kept whole", () => {
   assert.equal(familyOf("Fuel EX 9.8 XT Di2"), "Fuel EX");
   assert.equal(familyOf("Fuel EXe 9.7"), "Fuel EXe");
   assert.equal(familyOf("Top Fuel 8"), "Top Fuel");
+  assert.equal(familyOf("FX Sport SL 4"), "FX Sport");
+  assert.equal(familyOf("FX Sport AL 3"), "FX Sport");
+  assert.equal(familyOf("FX 2"), "FX");
+  assert.equal(familyOf("FX 2 Midstep"), "FX");
+  assert.equal(familyOf("Dual Sport 3"), "Dual Sport");
+  assert.equal(familyOf("Verve 3 Lowstep"), "Verve");
   assert.equal(familyOf("Madone SLR 9 AXS - No. 76 ICON"), "Madone");
   assert.equal(familyOf("  Checkpoint   ALR 5 "), "Checkpoint");
   assert.equal(familyOf(""), "");
@@ -77,6 +83,7 @@ test("cascading options ignore their own filter and sort sizes by fit", () => {
   assert.deepEqual(choiceValues(matchOffers(offers, query, "size"), "size"), ["S", "M"]);
   assert.deepEqual(choiceValues(offers, "family"), ["Domane", "Fuel EX", "Marlin"]);
   assert.deepEqual(choiceValues(offers, "generation"), ["Gen 3", "Gen 7"]);
+  assert.deepEqual(["S", "XP", "XS"].sort(compareSize), ["XS", "XP", "S"]);
   assert.deepEqual(["XL", "M", "56", "XS (27.5\" wheel)", "50", "ML"].sort(compareSize), [
     "50",
     "56",

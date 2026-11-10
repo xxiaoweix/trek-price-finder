@@ -22,15 +22,55 @@ _PENALTY_SECONDS = 0.0
 _PENALTY_CEILING_SECONDS = 2.0
 _OTHER_ATTEMPTS = 3
 _TOO_MANY_REQUESTS_ATTEMPTS = 6
+_METRICS_LOCK = threading.Lock()
+_ATTEMPTS = 0
+_THROTTLED = 0
+_RETRIES = 0
+_LATENCY_SECONDS = 0.0
 
 
 def reset_rate_limiter() -> None:
     """Clear process-wide throttle state. Tests use this between cases."""
 
-    global _NEXT_REQUEST_AT, _PENALTY_SECONDS
+    global _NEXT_REQUEST_AT, _PENALTY_SECONDS, _ATTEMPTS, _THROTTLED, _RETRIES, _LATENCY_SECONDS
     with _RATE_LOCK:
         _NEXT_REQUEST_AT = 0.0
         _PENALTY_SECONDS = 0.0
+    with _METRICS_LOCK:
+        _ATTEMPTS = _THROTTLED = _RETRIES = 0
+        _LATENCY_SECONDS = 0.0
+
+
+@dataclass(frozen=True)
+class RequestMetrics:
+    """Process-wide HTTP counters: every attempt, 429s, retries, and mean latency."""
+
+    attempts: int
+    throttled: int
+    retries: int
+    avg_latency_seconds: float
+
+    def summary(self) -> str:
+        return (
+            f"http={self.attempts} 429s={self.throttled} retries={self.retries} "
+            f"latency={self.avg_latency_seconds:.2f}s"
+        )
+
+
+def request_metrics() -> RequestMetrics:
+    with _METRICS_LOCK:
+        average = _LATENCY_SECONDS / _ATTEMPTS if _ATTEMPTS else 0.0
+        return RequestMetrics(_ATTEMPTS, _THROTTLED, _RETRIES, average)
+
+
+def _record_attempt(started: float, *, throttled: bool = False, retry: bool = False) -> None:
+    global _ATTEMPTS, _THROTTLED, _RETRIES, _LATENCY_SECONDS
+    elapsed = time.monotonic() - started
+    with _METRICS_LOCK:
+        _ATTEMPTS += 1
+        _LATENCY_SECONDS += elapsed
+        _THROTTLED += int(throttled)
+        _RETRIES += int(retry)
 
 
 def rate_limit_penalty_seconds() -> float:
@@ -142,6 +182,7 @@ class HTTPClient:
         for attempt in range(_TOO_MANY_REQUESTS_ATTEMPTS):
             host = request.host
             self._await_rate_limit(host)
+            started = time.monotonic()
             try:
                 with self._opener.open(request, timeout=self.timeout) as raw:
                     body_bytes = raw.read(self.max_response_bytes + 1)
@@ -153,20 +194,23 @@ class HTTPClient:
                         raw.headers.get_content_charset() or "utf-8", "replace"
                     )
                     note_success()
+                    _record_attempt(started)
                     return Response(
                         text=body,
                         url=raw.geturl(),
                         status_code=raw.status,
                     )
             except HTTPError as exc:
+                limit = _TOO_MANY_REQUESTS_ATTEMPTS if exc.code == 429 else _OTHER_ATTEMPTS
+                retrying = (exc.code == 429 or exc.code >= 500) and attempt + 1 < limit
+                _record_attempt(started, throttled=exc.code == 429, retry=retrying)
                 if exc.code != 429 and exc.code < 500:
                     raise
                 last_error = exc
-                limit = _TOO_MANY_REQUESTS_ATTEMPTS if exc.code == 429 else _OTHER_ATTEMPTS
                 retry_after = _retry_after_seconds(exc) if exc.code == 429 else 0.0
                 if exc.code == 429:
                     note_throttle(retry_after)
-                if attempt + 1 >= limit:
+                if not retrying:
                     raise
                 time.sleep(_backoff_seconds(attempt, retry_after))
                 continue
@@ -174,7 +218,9 @@ class HTTPClient:
             # which urllib raises unwrapped when the server drops the socket.
             except (IncompleteRead, URLError, TimeoutError, ConnectionError) as exc:
                 last_error = exc
-                if attempt + 1 >= _OTHER_ATTEMPTS:
+                retrying = attempt + 1 < _OTHER_ATTEMPTS
+                _record_attempt(started, retry=retrying)
+                if not retrying:
                     raise
                 time.sleep(_backoff_seconds(attempt, 0.0))
                 continue

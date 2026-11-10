@@ -82,6 +82,7 @@ def section(text: str, start: str, end_candidates: tuple[str, ...]) -> str:
 
 # Some Trek colorways are stored in Locally with Spanish or Italian size codes.
 _SIZE_ALIASES = {
+    "XP": "XS",
     "P": "S",
     "G": "L",
     "MG": "M/L",

@@ -20,7 +20,7 @@ from typing import Any
 
 import yaml
 
-from ...core.http import HTTPClient
+from ...core.http import HTTPClient, request_metrics
 from ...core.models import Listing
 from .geography import seed_cells, subdivide
 from .models import AppConfig, LocallySpec, LocallyVariant, WatchSpec
@@ -620,7 +620,8 @@ def scan_top_sellers(
             summary = storage.coverage_summary(scan_id)
             progress(
                 f"PROGRESS scan={scan_id} processed_cells={processed} "
-                f"requests={stats.request_count} cells={summary['cells']}"
+                f"requests={stats.request_count} {request_metrics().summary()} "
+                f"cells={summary['cells']}"
             )
     run_price(pending_price_jobs())
     if result.ignored_out_of_scope:
@@ -636,6 +637,6 @@ def scan_top_sellers(
         "product discovery: "
         f"{stats.discovery_requests} map calls, "
         f"{stats.inventory_requests} store calls, "
-        f"{stats.price_requests} price calls"
+        f"{stats.price_requests} price calls; {request_metrics().summary()}"
     )
     return stats

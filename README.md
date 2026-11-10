@@ -2,7 +2,8 @@
 
 Finds the cheapest in-stock Trek bikes at US dealers.
 
-Latest prices for ten popular Trek families:
+Latest prices for 13 Trek families: ten popular mountain, road, and gravel
+lines, plus the FX, FX Sport, and Verve hybrids:
 https://xxiaoweix.github.io/trek-price-finder/
 
 It does not buy anything, and it does not need an account. A full US scan is
@@ -70,7 +71,7 @@ the whole list. Keys are the `key:` lines in the catalog.
 `site/index.html` is a static page. Open it from the `site/` folder after the
 JSON file exists. The page reads only that file. The published page refreshes
 weekly via GitHub Actions. Filters on the page are
-model, generation, size, color, and state. It does not contact Trek or Locally.
+family, model, generation, size, color, and state. It does not contact Trek or Locally.
 
 ## Configuration
 

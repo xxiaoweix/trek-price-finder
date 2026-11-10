@@ -107,6 +107,7 @@ class _Response:
 def test_locally_romance_language_sizes_match_the_catalog_label():
     from bike_price_alerts.core.parsing import matching_size
 
+    assert matching_size(["XP"], ("XS",)) == "XP"
     assert matching_size(["P"], ("S",)) == "P"
     assert matching_size(["G"], ("L",)) == "G"
     assert matching_size(["MG"], ("ML",)) == "MG"
@@ -117,7 +118,7 @@ def test_locally_romance_language_sizes_match_the_catalog_label():
     assert matching_size(['XS (27.5" wheel)'], ('XS (27.5" wheel)',)) == 'XS (27.5" wheel)'
 
 
-def test_published_top_seller_list_locks_ten_families():
+def test_published_top_seller_list_locks_its_families():
     raw = yaml.safe_load(Path("config/trek/top-sellers.yaml").read_text(encoding="utf-8"))
     assert [item["family"] for item in raw["families"]] == [
         "Checkpoint",
@@ -130,18 +131,22 @@ def test_published_top_seller_list_locks_ten_families():
         "Slash",
         "Procaliber",
         "Checkmate",
+        "FX",
+        "FX Sport",
+        "Verve",
     ]
     for family in raw["families"]:
         assert str(family["source_url"]).startswith("https://")
     watches = load_top_seller_watches(Path("config/trek/top-sellers.yaml"))
     names = [watch.canonical_name for watch in watches]
-    assert len(names) == 57
-    assert sum(len(watch.locally.variants) for watch in watches) == 836
+    assert len(names) == 70
+    assert sum(len(watch.locally.variants) for watch in watches) == 946
     assert "Top Fuel 8 Gen 4" not in names
     assert all("frameset" not in name.casefold() and "+" not in name for name in names)
     assert "Checkpoint ALR 3 Gen 3" in names
     assert "Domane AL 2 Gen 4" in names
     assert "Marlin 4 Gen 3" in names
+    assert {"FX 1", "FX Sport AL 3", "Verve 1 Lowstep"} <= set(names)
     fuel = next(watch for watch in watches if watch.canonical_name == "Fuel EX 8 Gen 7")
     assert "Fuel EX 8" in fuel.aliases
 
